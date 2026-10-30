@@ -1,0 +1,547 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Parking Management System</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .parking-page {
+            max-width: 1100px;
+            margin: 35px auto;
+            padding: 20px;
+        }
+
+        .parking-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .parking-panel {
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+        }
+
+        .parking-form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            min-height: 44px;
+            padding: 10px;
+            border: 1px solid #bbb;
+            border-radius: 8px;
+            font: inherit;
+            box-sizing: border-box;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .time-selectors {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        .parking-layout {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .slot {
+            min-height: 85px;
+            padding: 12px 5px;
+            border: 2px solid #198754;
+            border-radius: 10px;
+            background: #e8f7ee;
+            color: #14532d;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .slot span {
+            display: block;
+            margin-top: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .slot.selected {
+            background: #0d6efd;
+            border-color: #084298;
+            color: white;
+        }
+
+        .slot.occupied,
+        .slot:disabled {
+            background: #fee2e2;
+            border-color: #dc2626;
+            color: #991b1b;
+            cursor: not-allowed;
+            opacity: 1;
+        }
+
+        .slot-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 18px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .legend-box {
+            width: 15px;
+            height: 15px;
+            border-radius: 4px;
+            border: 1px solid #777;
+        }
+
+        .legend-available {
+            background: #e8f7ee;
+            border-color: #198754;
+        }
+
+        .legend-selected {
+            background: #0d6efd;
+            border-color: #084298;
+        }
+
+        .legend-booked {
+            background: #fee2e2;
+            border-color: #dc2626;
+        }
+
+        .availability-card {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f3f7fb;
+        }
+
+        .status-pill {
+            font-weight: 700;
+        }
+
+        .small-note {
+            font-size: 14px;
+        }
+
+        .booking-submit {
+            width: 100%;
+            min-height: 48px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 8px;
+            background: #0d6efd;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .booking-submit:hover {
+            background: #084298;
+        }
+
+        #booking-message.error {
+            color: #b91c1c;
+        }
+
+        #booking-message.success {
+            color: #15803d;
+        }
+
+        .booking-item {
+            padding: 18px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .booking-status.confirmed {
+            color: #15803d;
+            font-weight: 700;
+        }
+
+        .booking-status.cancelled {
+            color: #b91c1c;
+            font-weight: 700;
+        }
+
+        .cancel-booking-btn {
+            margin-top: 10px;
+            padding: 10px 15px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            .parking-form {
+                grid-template-columns: 1fr;
+            }
+
+            .parking-layout {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+            .parking-panel {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar">
+
+            <a href="index.html" class="logo">Smart Parking</a>
+
+            <button
+                type="button"
+                class="menu-toggle"
+                aria-label="Toggle navigation"
+                aria-expanded="false">
+                ☰
+            </button>
+
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="parking.html" aria-current="page">Book Parking</a>
+                <a href="admin.html">Admin </a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="login.html">Login</a>
+                <a href="register.html">Register</a>
+            </div>
+
+        </nav>
+    </header>
+
+    <main class="parking-page">
+
+        <section class="parking-heading">
+            <h1>Smart Parking Reservation</h1>
+            <p>
+                Reserve your parking space by selecting your location,
+                date, arrival time and available parking slot.
+            </p>
+        </section>
+
+        <section class="parking-panel">
+
+            <h2>Booking Information</h2>
+
+            <form id="booking-form" class="parking-form">
+
+                <div class="form-group">
+                    <label for="full-name">Full Name</label>
+                    <input
+                        type="text"
+                        id="full-name"
+                        name="fullName"
+                        placeholder="Enter your full name"
+                        autocomplete="name"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="vehicle-number">Vehicle Number</label>
+                    <input
+                        type="text"
+                        id="vehicle-number"
+                        name="vehicleNumber"
+                        placeholder="Example: TS09AB1234"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="vehicle-type">Vehicle Type</label>
+                    <select id="vehicle-type" name="vehicleType" required>
+                        <option value="car" selected>Car</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="booking-location">Parking Location</label>
+                    <select id="booking-location" name="location" required>
+                        <option value="">Select location</option>
+                        <option value="Parking Area A">Parking Area A</option>
+                        <option value="Parking Area B">Parking Area B</option>
+                        <option value="Parking Area C">Parking Area C</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="booking-date">Arrival Date</label>
+                    <input
+                        type="date"
+                        id="booking-date"
+                        name="date"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label>Arrival Time (AM/PM)</label>
+
+                    <div class="time-selectors">
+
+                        <select id="arrival-hour" aria-label="Arrival hour" required>
+                            <option value="">Hour</option>
+                            <option value="1">01</option>
+                            <option value="2">02</option>
+                            <option value="3">03</option>
+                            <option value="4">04</option>
+                            <option value="5">05</option>
+                            <option value="6">06</option>
+                            <option value="7">07</option>
+                            <option value="8">08</option>
+                            <option value="9">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+
+                        <select id="arrival-minute" aria-label="Arrival minutes" required>
+                            <option value="">Minute</option>
+                            <option value="00">00</option>
+                            <option value="15">15</option>
+                            <option value="30">30</option>
+                            <option value="45">45</option>
+                        </select>
+
+                        <select id="arrival-period" aria-label="AM or PM" required>
+                            <option value="">AM/PM</option>
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                        </select>
+
+                    </div>
+
+                    <small>Example: 10:30 AM or 02:15 PM</small>
+
+                    <input
+                        type="hidden"
+                        id="booking-time"
+                        name="time"
+                        required>
+                </div>
+
+                <input
+                    type="hidden"
+                    id="selected-slot"
+                    name="slot"
+                    required>
+
+                <div class="full-width">
+
+                    <h2>Select a Parking Slot</h2>
+
+                    <p>
+                        Select a green slot to reserve it. Red slots are
+                        booked for the selected location, date and time.
+                    </p>
+
+                    <div id="slot-grid" class="parking-layout">
+
+                        <button type="button" class="slot" data-slot="A1">
+                            A1 <span>Available</span>
+                        </button>
+
+                        <button type="button" class="slot" data-slot="A2">
+                            A2 <span>Available</span>
+                        </button>
+
+                        <button type="button" class="slot" data-slot="A3">
+                            A3 <span>Available</span>
+                        </button>
+
+                        <button type="button" class="slot" data-slot="A4">
+                            A4 <span>Available</span>
+                        </button>
+
+                        <button type="button" class="slot" data-slot="A5">
+                            A5 <span>Available</span>
+                        </button>
+
+                        <button type="button" class="slot" data-slot="A6">
+                            A6 <span>Available</span>
+                        </button>
+
+                        <button type="button" class="slot" data-slot="A7">
+                            A7 <span>Available</span>
+                        </button>
+
+                        <button type="button" class="slot" data-slot="A8">
+                            A8 <span>Available</span>
+                        </button>
+
+                    </div>
+
+                    <div class="slot-legend">
+                        <div class="legend-item">
+                            <span class="legend-box legend-available"></span>
+                            Available
+                        </div>
+
+                        <div class="legend-item">
+                            <span class="legend-box legend-selected"></span>
+                            Selected
+                        </div>
+
+                        <div class="legend-item">
+                            <span class="legend-box legend-booked"></span>
+                            Booked
+                        </div>
+                    </div>
+
+                    <div class="availability-card">
+                        <p
+                            id="availability-status"
+                            class="status-pill"
+                            role="status"
+                            aria-live="polite">
+                            Select your booking details
+                        </p>
+
+                        <p id="availability-note" class="small-note">
+                            Select a location, date and arrival time
+                            to check availability.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="full-width">
+
+                    <button type="submit" class="booking-submit">
+                        Confirm Parking Booking
+                    </button>
+
+                    <p
+                        id="booking-message"
+                        role="status"
+                        aria-live="polite">
+                    </p>
+
+                </div>
+
+            </form>
+
+        </section>
+
+        <section class="parking-panel">
+            <h2>Booking History</h2>
+
+            <div id="booking-list">
+                <p>Loading bookings...</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>
+            &copy; <span data-year></span>
+            Smart Parking Management System. All rights reserved.
+        </p>
+    </footer>
+
+    <script>
+        /*
+         * Convert the selected 12-hour time to the 24-hour format
+         * expected by the existing JavaScript and C backend.
+         *
+         * Example:
+         * 02:15 PM -> 14:15
+         * 10:30 AM -> 10:30
+         */
+        (function () {
+            const hourField = document.getElementById("arrival-hour");
+            const minuteField = document.getElementById("arrival-minute");
+            const periodField = document.getElementById("arrival-period");
+            const timeField = document.getElementById("booking-time");
+
+            function updateArrivalTime() {
+                if (
+                    !hourField.value ||
+                    minuteField.value === "" ||
+                    !periodField.value
+                ) {
+                    timeField.value = "";
+                } else {
+                    let hour = Number(hourField.value);
+
+                    if (periodField.value === "AM" && hour === 12) {
+                        hour = 0;
+                    } else if (periodField.value === "PM" && hour !== 12) {
+                        hour += 12;
+                    }
+
+                    timeField.value =
+                        String(hour).padStart(2, "0") +
+                        ":" +
+                        minuteField.value;
+                }
+
+                timeField.dispatchEvent(
+                    new Event("change", { bubbles: true })
+                );
+
+                timeField.dispatchEvent(
+                    new Event("input", { bubbles: true })
+                );
+            }
+
+            [hourField, minuteField, periodField].forEach(function (field) {
+                field.addEventListener("change", updateArrivalTime);
+            });
+
+            document.getElementById("booking-form")
+                .addEventListener("reset", function () {
+                    setTimeout(updateArrivalTime, 0);
+                });
+
+            updateArrivalTime();
+        })();
+    </script>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
+

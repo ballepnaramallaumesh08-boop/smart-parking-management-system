@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin | Smart Parking</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .admin-dashboard {
+            padding-top: 40px;
+            padding-bottom: 60px;
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .admin-stat {
+            padding: 24px;
+            border: 1px solid rgba(139, 202, 255, 0.3);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .admin-stat h3 {
+            margin-bottom: 12px;
+        }
+
+        .admin-stat p {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .admin-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            white-space: nowrap;
+        }
+
+        .admin-table th {
+            color: #8bcaff;
+        }
+
+        .admin-action {
+            padding: 8px 12px;
+            border: 1px solid #ff7777;
+            border-radius: 6px;
+            color: #ffaaaa;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .admin-action:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .admin-status {
+            font-weight: bold;
+        }
+
+        .admin-status.confirmed {
+            color: #8df5b5;
+        }
+
+        .admin-status.cancelled {
+            color: #ffaaaa;
+        }
+
+        .admin-empty {
+            padding: 25px 0;
+            text-align: center;
+        }
+
+        .admin-error {
+            color: #ffaaaa;
+        }
+
+        .admin-table td {
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <nav class="navbar container">
+
+        <a class="brand" href="index.html">
+            <span class="brand-mark">S</span>
+            <span>SMART<span class="brand-light">PARKING</span></span>
+        </a>
+
+        <button
+            class="menu-toggle"
+            type="button"
+            aria-label="Toggle navigation"
+            aria-expanded="false">
+            ☰
+        </button>
+
+        <ul class="nav-links">
+            <li><a class="nav-button" href="index.html">Home</a></li>
+            <li><a class="nav-button" href="parking.html">Find Parking</a></li>
+            <li><a class="nav-button" href="about.html">About</a></li>
+            <li><a class="nav-button" href="contact.html">Contact</a></li>
+            <li><a class="nav-button active" href="admin.html">Admin Panel</a></li>
+        </ul>
+
+    </nav>
+</header>
+
+<main class="container admin-dashboard">
+
+    <section class="page-intro">
+        <p class="eyebrow">SMART PARKING MANAGEMENT</p>
+        <h1>Admin <span>Dashboard</span></h1>
+        <p>View parking bookings and manage their status.</p>
+    </section>
+
+    <section class="admin-stats">
+
+        <div class="admin-stat">
+            <h3>Total Bookings</h3>
+            <p id="total-bookings">0</p>
+        </div>
+
+        <div class="admin-stat">
+            <h3>Active Bookings</h3>
+            <p id="active-bookings">0</p>
+        </div>
+
+        <div class="admin-stat">
+            <h3>Cancelled Bookings</h3>
+            <p id="cancelled-bookings">0</p>
+        </div>
+
+    </section>
+
+    <section class="surface-card">
+
+        <div class="card-heading">
+            <div>
+                <p class="eyebrow">BOOKING MANAGEMENT</p>
+                <h2>All Parking Bookings</h2>
+            </div>
+
+            <button
+                class="button button-primary"
+                type="button"
+                id="refresh-bookings">
+                Refresh
+            </button>
+        </div>
+
+        <div class="admin-table-wrapper">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Customer</th>
+                        <th>Car Number</th>
+                        <th>Vehicle Type</th>
+                        <th>Location</th>
+                        <th>Slot</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="admin-booking-list">
+                    <tr>
+                        <td colspan="10">Loading bookings...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p id="admin-empty" class="admin-empty" hidden>
+            No bookings found.
+        </p>
+
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-inner">
+
+        <a class="brand footer-brand" href="index.html">
+            <span class="brand-mark">S</span>
+            <span>SMART<span class="brand-light">PARKING</span></span>
+        </a>
+
+        <p>Thoughtful parking. Smoother journeys.</p>
+
+        <p>
+            &copy; <span data-year></span>
+            Smart Parking Management System.
+        </p>
+
+    </div>
+</footer>
+
+<!-- Use the shared JavaScript file -->
+<script src="script.js"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,6 @@
+backend/smartparking.exe
+backend/errors.txt
+backend/*.db
+backend/*.db-journal
+backend/shell (2).c
+/smart parking management system/

@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | Smart Parking</title>
+
+
+<link rel="stylesheet" href="style.css">
+<script src="script.js" defer></script>
+
+
+</head>
+
+<body>
+
+<header class="site-header">
+    <nav class="navbar container">
+
+
+    <a class="brand" href="index.html">
+        <span class="brand-mark">S</span>
+        <span>SMART<span class="brand-light">PARKING</span></span>
+    </a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation"
+            aria-expanded="false">☰</button>
+
+    <ul class="nav-links">
+        <li><a class="nav-button" href="index.html">Home</a></li>
+        <li><a class="nav-button" href="parking.html">Find Parking</a></li>
+        <li><a class="nav-button" href="about.html">About</a></li>
+        <li><a class="nav-button" href="contact.html">Contact</a></li>
+        <li><a class="nav-button" href="login.html">Login</a></li>
+        <li><a class="nav-button nav-cta active" href="register.html">Get Started</a></li>
+    </ul>
+
+</nav>
+
+
+</header>
+
+<main class="auth-wrap container">
+
+
+<section class="auth-card surface-card">
+
+    <div class="auth-emblem">S</div>
+
+    <p class="eyebrow">MAKE ROOM FOR EASE</p>
+
+    <h1>Create Your <span>Account.</span></h1>
+
+    <p class="auth-description">
+        Join the Smart Parking demonstration and explore
+        a more organised parking experience.
+    </p>
+
+    <form id="register-form" class="form-card auth-form">
+
+        <label for="register-name">Full Name</label>
+        <input id="register-name" name="name" type="text"
+               placeholder="Enter your full name" required>
+
+        <label for="register-email">Email Address</label>
+        <input id="register-email" name="email" type="email"
+               placeholder="you@example.com" required>
+
+        <label for="register-password">Create Password</label>
+        <input id="register-password" name="password" type="password"
+               placeholder="At least 6 characters"
+               minlength="6" required>
+
+        <label for="confirm-password">Confirm Password</label>
+        <input id="confirm-password" name="confirmPassword" type="password"
+               placeholder="Re-enter your password"
+               minlength="6" required>
+
+        <button class="button button-primary button-full" type="submit">
+            Create Demo Account →
+        </button>
+
+        <p id="register-message" class="form-message"
+           role="status" aria-live="polite"></p>
+
+    </form>
+
+    <p class="auth-switch">
+        Already registered? <a href="login.html">Sign in</a>
+    </p>
+
+    <p class="small-note">
+        Demonstration only. This form does not create a real account
+        or securely store your credentials.
+    </p>
+
+</section>
+
+
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <a class="brand footer-brand" href="index.html">
+            <span class="brand-mark">S</span>
+            <span>SMART<span class="brand-light">PARKING</span></span>
+        </a>
+
+
+    <p>Thoughtful parking. Smoother journeys.</p>
+    <p>© <span data-year>2026</span> Smart Parking Management System</p>
+</div>
+
+
+</footer>
+
+</body>
+</html>

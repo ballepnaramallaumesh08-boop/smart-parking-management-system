@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Smart Parking</title>
+
+
+<link rel="stylesheet" href="style.css">
+<script src="script.js" defer></script>
+
+
+</head>
+
+<body>
+
+<header class="site-header">
+    <nav class="navbar container">
+
+
+    <a class="brand" href="index.html">
+        <span class="brand-mark">S</span>
+        <span>SMART<span class="brand-light">PARKING</span></span>
+    </a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation"
+            aria-expanded="false">☰</button>
+
+    <ul class="nav-links">
+        <li><a class="nav-button" href="index.html">Home</a></li>
+        <li><a class="nav-button" href="parking.html">Find Parking</a></li>
+        <li><a class="nav-button" href="about.html">About</a></li>
+        <li><a class="nav-button active" href="contact.html">Contact</a></li>
+        <li><a class="nav-button" href="login.html">Login</a></li>
+        <li><a class="nav-button nav-cta" href="register.html">Get Started</a></li>
+    </ul>
+
+</nav>
+
+
+</header>
+
+<main class="page-main container">
+
+
+<section class="page-intro">
+
+    <p class="eyebrow">WE'RE HERE TO HELP</p>
+
+    <h1>Let's Start a <span>Conversation.</span></h1>
+
+    <p>
+        Have a question or an idea?
+        Send a message using the form below.
+    </p>
+
+</section>
+
+<section class="contact-layout">
+
+    <div class="surface-card contact-info">
+
+        <p class="eyebrow">GET IN TOUCH</p>
+
+        <h2>Every Good Journey Begins with a Hello.</h2>
+
+        <p>
+            We welcome your questions, suggestions, and feedback
+            about the Smart Parking project.
+        </p>
+
+        <div class="contact-detail">
+            <span class="detail-icon">✉</span>
+
+            <div>
+                <strong>Email Support</strong>
+                <p>Configure your official support email before launch.</p>
+            </div>
+        </div>
+
+        <div class="contact-detail">
+            <span class="detail-icon">◷</span>
+
+            <div>
+                <strong>Support Hours</strong>
+                <p>Operating hours can be added when the service launches.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <form class="surface-card form-card" id="contact-form">
+
+        <p class="eyebrow">SEND A MESSAGE</p>
+        <h2>How Can We Help?</h2>
+
+        <label for="contact-name">Your Name</label>
+        <input id="contact-name" name="name" type="text"
+               placeholder="Enter your name" required>
+
+        <label for="contact-email">Email Address</label>
+        <input id="contact-email" name="email" type="email"
+               placeholder="you@example.com" required>
+
+        <label for="contact-subject">Subject</label>
+
+        <select id="contact-subject" name="subject" required>
+            <option value="">Choose a topic</option>
+            <option>Parking Availability</option>
+            <option>Booking Support</option>
+            <option>Account Assistance</option>
+            <option>General Enquiry</option>
+        </select>
+
+        <label for="contact-message">Message</label>
+        <textarea id="contact-message" name="message" rows="5"
+                  placeholder="Write your message here..."
+                  required></textarea>
+
+        <button class="button button-primary button-full" type="submit">
+            Send Demo Message →
+        </button>
+
+        <p class="form-message" id="contact-message-status"
+           role="status" aria-live="polite"></p>
+
+    </form>
+
+</section>
+
+
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <a class="brand footer-brand" href="index.html">
+            <span class="brand-mark">S</span>
+            <span>SMART<span class="brand-light">PARKING</span></span>
+        </a>
+
+
+    <p>Thoughtful parking. Smoother journeys.</p>
+    <p>© <span data-year>2026</span> Smart Parking Management System</p>
+</div>
+
+
+</footer>
+
+</body>
+</html>

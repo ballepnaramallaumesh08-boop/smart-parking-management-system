@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | Smart Parking</title>
+
+
+<link rel="stylesheet" href="style.css">
+<script src="script.js" defer></script>
+
+
+</head>
+
+<body>
+
+<header class="site-header">
+    <nav class="navbar container">
+
+
+    <a class="brand" href="index.html">
+        <span class="brand-mark">S</span>
+        <span>SMART<span class="brand-light">PARKING</span></span>
+    </a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation"
+            aria-expanded="false">☰</button>
+
+    <ul class="nav-links">
+        <li><a class="nav-button" href="index.html">Home</a></li>
+        <li><a class="nav-button" href="parking.html">Find Parking</a></li>
+        <li><a class="nav-button" href="about.html">About</a></li>
+        <li><a class="nav-button" href="contact.html">Contact</a></li>
+        <li><a class="nav-button active" href="login.html">Login</a></li>
+        <li><a class="nav-button nav-cta" href="register.html">Get Started</a></li>
+    </ul>
+
+</nav>
+
+
+</header>
+
+<main class="auth-wrap container">
+
+
+<section class="auth-card surface-card">
+
+    <div class="auth-emblem">S</div>
+
+    <p class="eyebrow">WELCOME BACK</p>
+
+    <h1>Your Next Journey <span>Starts Here.</span></h1>
+
+    <p class="auth-description">
+        Sign in to explore the Smart Parking demonstration.
+    </p>
+
+    <form id="login-form" class="form-card auth-form">
+
+        <label for="login-email">Email Address</label>
+        <input id="login-email" name="email" type="email"
+               placeholder="you@example.com" required>
+
+        <label for="login-password">Password</label>
+        <input id="login-password" name="password" type="password"
+               placeholder="Enter your password"
+               minlength="6" required>
+
+        <button class="button button-primary button-full" type="submit">
+            Sign In →
+        </button>
+
+        <p id="login-message" class="form-message"
+           role="status" aria-live="polite"></p>
+
+    </form>
+
+    <p class="auth-switch">
+        New here? <a href="register.html">Create an account</a>
+    </p>
+
+    <p class="small-note">
+        Demonstration only. Real authentication requires a secure backend.
+        Do not enter a real password.
+    </p>
+
+</section>
+
+
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <a class="brand footer-brand" href="index.html">
+            <span class="brand-mark">S</span>
+            <span>SMART<span class="brand-light">PARKING</span></span>
+        </a>
+
+
+    <p>Thoughtful parking. Smoother journeys.</p>
+    <p>© <span data-year>2026</span> Smart Parking Management System</p>
+</div>
+
+
+</footer>
+
+</body>
+</html>
