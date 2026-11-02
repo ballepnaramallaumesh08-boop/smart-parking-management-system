@@ -1,3 +1,4 @@
+
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <winsock2.h>
@@ -124,6 +125,21 @@ static void handle_client(socket_t client, sqlite3 *db)
     {
         send_response(client, 200, "OK", "{\"ok\":true}");
     }
+
+    /* Temporary root route to test the deployed backend. */
+    else if (
+        strcmp(method, "GET") == 0 &&
+        strcmp(path, "/") == 0
+    )
+    {
+        send_response(
+            client,
+            200,
+            "OK",
+            "{\"message\":\"Smart Parking backend is running\"}"
+        );
+    }
+
     else if (
         strcmp(method, "GET") == 0 &&
         strcmp(path, "/api/bookings") == 0
@@ -145,6 +161,7 @@ static void handle_client(socket_t client, sqlite3 *db)
             );
         }
     }
+
     else if (
         strcmp(method, "POST") == 0 &&
         strcmp(path, "/api/bookings") == 0
@@ -232,6 +249,7 @@ static void handle_client(socket_t client, sqlite3 *db)
             }
         }
     }
+
     else if (
         strcmp(method, "POST") == 0 &&
         strncmp(path, "/api/bookings/cancel?id=", 24) == 0
@@ -269,6 +287,7 @@ static void handle_client(socket_t client, sqlite3 *db)
             );
         }
     }
+
     else
     {
         send_response(
@@ -386,3 +405,4 @@ int main(void)
 
     return result;
 }
+
