@@ -237,3 +237,15 @@ static void handle_client(socket_t client, sqlite3 *db)
 
     CLOSESOCKET(client);
 }
+int main(void)
+{
+    sqlite3 *db = NULL;
+
+    /* Your database initialization code */
+
+    int result = run_http_server(db);
+
+    sqlite3_close(db);
+
+    return result;
+}
