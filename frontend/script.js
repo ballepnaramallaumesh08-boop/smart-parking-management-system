@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     "use strict";
 
-    const API_BASE = "http://localhost:8080/api";
-
+    const API_BASE = "https://smart-parking-management-system-0c6s.onrender.com/api";
     let bookingsCache = [];
     let bookingRequestInProgress = false;
     let lastBookingLoadFailed = false;
@@ -622,145 +621,161 @@ document.addEventListener("DOMContentLoaded", function () {
 
         bookingDate.min = `${year}-${month}-${day}`;
     }
+// ==========================================
+// CREATE NEW BOOKING
+// ==========================================
 
-    // ==========================================
-    // CREATE NEW BOOKING
-    // ==========================================
+if (bookingForm) {
+    bookingForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
 
-    if (bookingForm) {
-        bookingForm.addEventListener("submit", async function (event) {
-            event.preventDefault();
+        const formData = new FormData(bookingForm);
 
-            const formData = new FormData(bookingForm);
+        const name = String(
+            formData.get("fullName") || ""
+        ).trim();
 
-            const name = String(formData.get("fullName") || "").trim();
+        const vehicle = String(
+            formData.get("vehicleNumber") || ""
+        ).trim().toUpperCase();
 
-            const vehicleNumber = String(
-                formData.get("vehicleNumber") || ""
-            ).trim().toUpperCase();
+        const vehicleType = String(
+            formData.get("vehicleType") || ""
+        ).trim();
 
-            const date = String(formData.get("date") || "").trim();
-            const time = String(formData.get("time") || "").trim();
+        const location = String(
+            formData.get("location") || ""
+        ).trim();
 
-            const slot = String(
-                formData.get("slot") ||
-                (selectedSlotInput ? selectedSlotInput.value : "") ||
-                ""
-            ).trim();
+        const date = String(
+            formData.get("date") || ""
+        ).trim();
 
-            const vehicleType = String(
-                formData.get("vehicleType") || "car"
-            ).trim().toLowerCase();
+        const hour = document.getElementById("arrival-hour")?.value || "";
+        const minute = document.getElementById("arrival-minute")?.value || "";
+        const period = document.getElementById("arrival-period")?.value || "";
 
-            const location = bookingLocation
-                ? bookingLocation.value.trim()
-                : String(formData.get("location") || "").trim();
+        const slot = String(
+            selectedSlotInput?.value || ""
+        ).trim();
 
-            if (!name || !vehicleNumber || !date || !time || !slot || !location) {
-                showMessage(
-                    bookingMessage,
-                    "Complete all fields and select a parking slot.",
-                    true
-                );
-                return;
-            }
+        // Validate all required fields
+        if (
+            !name ||
+            !vehicle ||
+            !vehicleType ||
+            !location ||
+            !date ||
+            !hour ||
+            !minute ||
+            !period ||
+            !slot
+        ) {
+            showMessage(
+                bookingMessage,
+                "Please complete all fields and select a parking slot.",
+                true
+            );
+            return;
+        }
 
-            if (vehicleType !== "car") {
-                showMessage(bookingMessage, "Only cars are allowed.", true);
-                return;
-            }
+        // Convert AM/PM time to 24-hour format
+        let hours24 = Number(hour);
 
-            const selectedDate = new Date(date + "T00:00:00");
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+        if (period === "PM" && hours24 !== 12) {
+            hours24 += 12;
+        }
 
-            if (
-                Number.isNaN(selectedDate.getTime()) ||
-                selectedDate < today
-            ) {
-                showMessage(
-                    bookingMessage,
-                    "Please select today or a future date.",
-                    true
-                );
-                return;
-            }
+        if (period === "AM" && hours24 === 12) {
+            hours24 = 0;
+        }
 
-            const duplicate = bookingsCache.some(function (booking) {
-                return (
-                    isActiveBooking(booking) &&
-                    normalizeSlot(booking.slot) === normalizeSlot(slot) &&
-                    String(booking.date || "") === date &&
-                    String(booking.time || "").slice(0, 5) === time &&
-                    normalizeText(booking.location) === normalizeText(location)
-                );
-            });
+        const time =
+            String(hours24).padStart(2, "0") +
+            ":" +
+            minute;
 
-            if (duplicate) {
-                showMessage(
-                    bookingMessage,
-                    "This slot is already booked for the selected date and time.",
-                    true
-                );
+        // Update hidden time input
+        if (bookingTime) {
+            bookingTime.value = time;
+        }
 
-                await loadBookings();
-                return;
-            }
+        // Only cars are allowed
+        if (vehicleType.toLowerCase() !== "car") {
+            showMessage(
+                bookingMessage,
+                "Only cars are allowed.",
+                true
+            );
+            return;
+        }
 
-            const bookingData = {
-                name: name,
-                vehicle: vehicleNumber,
-                vehicleType: "Car",
-                location: location,
-                slot: slot,
-                date: date,
-                time: time
-            };
+        // Prepare booking data for backend
+        const bookingData = {
+            name: name,
+            vehicle: vehicle,
+            vehicleType: "Car",
+            location: location,
+            slot: slot,
+            date: date,
+            time: time
+        };
 
-            try {
-                const response = await fetch(`${API_BASE}/bookings`, {
+        console.log("Booking data being sent:", bookingData);
+
+        try {
+            const response = await fetch(
+                `${API_BASE}/bookings`,
+                {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify(bookingData)
-                });
-
-                const result = await readResponse(response);
-
-                if (!response.ok) {
-                    throw new Error(
-                        result.error || `Booking failed (HTTP ${response.status}).`
-                    );
                 }
+            );
 
-                bookingForm.reset();
+            const result = await readResponse(response);
 
-                if (selectedSlotInput) selectedSlotInput.value = "";
-
-                document.querySelectorAll(".slot.selected").forEach(function (item) {
-                    item.classList.remove("selected");
-                });
-
-                await loadBookings();
-
-                showMessage(
-                    bookingMessage,
-                    `Booking submitted successfully for parking slot ${slot}.`
-                );
-
-            } catch (error) {
-                console.error("Booking error:", error);
-
-                showMessage(
-                    bookingMessage,
-                    error.message || "Unable to save your booking.",
-                    true
+            if (!response.ok) {
+                throw new Error(
+                    result.error ||
+                    `Booking failed with HTTP ${response.status}`
                 );
             }
-        });
-    }
 
+            // Reset form after successful booking
+            bookingForm.reset();
+
+            if (selectedSlotInput) {
+                selectedSlotInput.value = "";
+            }
+
+            document.querySelectorAll(".slot.selected").forEach(
+                function (slotElement) {
+                    slotElement.classList.remove("selected");
+                }
+            );
+
+            await loadBookings();
+
+            showMessage(
+                bookingMessage,
+                `Booking submitted successfully for slot ${slot}.`
+            );
+
+        } catch (error) {
+            console.error("Booking error:", error);
+
+            showMessage(
+                bookingMessage,
+                error.message || "Unable to save booking.",
+                true
+            );
+        }
+    });
+}
+   
     // ==========================================
     // CLEAR BOOKINGS BUTTON
     // ==========================================
