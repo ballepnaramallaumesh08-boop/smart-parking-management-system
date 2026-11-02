@@ -621,7 +621,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         bookingDate.min = `${year}-${month}-${day}`;
     }
-// ==========================================
+
+   // ==========================================
 // CREATE NEW BOOKING
 // ==========================================
 
@@ -656,10 +657,12 @@ if (bookingForm) {
         const period = document.getElementById("arrival-period")?.value || "";
 
         const slot = String(
-            selectedSlotInput?.value || ""
+            formData.get("slot") ||
+            (selectedSlotInput ? selectedSlotInput.value : "") ||
+            ""
         ).trim();
 
-        // Validate all required fields
+        // Validate required fields
         if (
             !name ||
             !vehicle ||
@@ -679,7 +682,17 @@ if (bookingForm) {
             return;
         }
 
-        // Convert AM/PM time to 24-hour format
+        // Only cars are allowed
+        if (vehicleType.toLowerCase() !== "car") {
+            showMessage(
+                bookingMessage,
+                "Only cars are allowed.",
+                true
+            );
+            return;
+        }
+
+        // Convert AM/PM to 24-hour time
         let hours24 = Number(hour);
 
         if (period === "PM" && hours24 !== 12) {
@@ -700,17 +713,7 @@ if (bookingForm) {
             bookingTime.value = time;
         }
 
-        // Only cars are allowed
-        if (vehicleType.toLowerCase() !== "car") {
-            showMessage(
-                bookingMessage,
-                "Only cars are allowed.",
-                true
-            );
-            return;
-        }
-
-        // Prepare booking data for backend
+        // Prepare data for backend
         const bookingData = {
             name: name,
             vehicle: vehicle,
@@ -761,7 +764,7 @@ if (bookingForm) {
 
             showMessage(
                 bookingMessage,
-                `Booking submitted successfully for slot ${slot}.`
+                `Booking submitted successfully for parking slot ${slot}.`
             );
 
         } catch (error) {
@@ -769,13 +772,12 @@ if (bookingForm) {
 
             showMessage(
                 bookingMessage,
-                error.message || "Unable to save booking.",
+                error.message || "Unable to save your booking.",
                 true
             );
         }
     });
 }
-   
     // ==========================================
     // CLEAR BOOKINGS BUTTON
     // ==========================================
